@@ -5,10 +5,10 @@ import (
 	"sync"
 	"time"
 
-	"github.com/wascript3r/winter/lib/player"
-	"github.com/wascript3r/winter/lib/repeat"
-	"github.com/wascript3r/winter/lib/rnd"
-	"github.com/wascript3r/winter/lib/zombie"
+	"github.com/wascript3r/winter-is-coming/lib/player"
+	"github.com/wascript3r/winter-is-coming/lib/repeat"
+	"github.com/wascript3r/winter-is-coming/lib/rnd"
+	"github.com/wascript3r/winter-is-coming/lib/zombie"
 )
 
 type Game struct {

@@ -3,7 +3,7 @@ package player
 import (
 	"net"
 
-	"github.com/wascript3r/winter/lib/zombie"
+	"github.com/wascript3r/winter-is-coming/lib/zombie"
 )
 
 type Player struct {

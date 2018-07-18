@@ -1,11 +1,11 @@
-package main
+package server
 
 import (
 	"fmt"
 	"net"
 	"strconv"
 
-	"github.com/wascript3r/winter/lib/game"
+	"github.com/wascript3r/winter-is-coming/lib/game"
 )
 
 func emitErr(conn net.Conn, err error) {
@@ -16,7 +16,9 @@ func showHelp(conn net.Conn) {
 	fmt.Fprintln(conn, `
 		Command list:
 		START {player} - starts a new game (ex. START John)
-		SHOOT {x} {y} - shoots at given coordinates (ex. SHOOT 0 1)
+		SHOOT {x} {y}  - shoots at given coordinates (ex. SHOOT 0 1)
+		SHARE          - shares your current game to be accessible for friends
+		JOIN {GAME_ID} - joins the provided game
 	`)
 }
 
