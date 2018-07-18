@@ -18,7 +18,7 @@ func showHelp(conn net.Conn) {
 		START {name}   - starts a new game (ex. START John)
 		SHOOT {x} {y}  - shoots at given coordinates (ex. SHOOT 0 1)
 		SHARE          - shares your current game to be accessible for friends
-		JOIN {GAME_ID} - joins the provided game
+		JOIN {GAME_ID} - joins the provided game (ex. JOIN XVlBzgb)
 	`)
 }
 
@@ -38,4 +38,12 @@ func convCoord(xs, ys string, g *game.Game) (int, int, error) {
 	}
 
 	return x, y, nil
+}
+
+func isShared(g *game.Game) bool {
+	if g.ID == "" {
+		return false
+	}
+	_, ok := shared[g.ID]
+	return ok
 }

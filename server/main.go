@@ -46,6 +46,7 @@ func Run(c *Config) {
 
 	log.Println("Starting server on port " + port + "...")
 
+	// shows active goroutines
 	// repeat.Do(time.Second, func() bool {
 	// 	log.Println(runtime.NumGoroutine())
 	// 	return false
@@ -78,14 +79,13 @@ func handle(conn net.Conn) {
 	g.Leave(p)
 	g.EmitAll("Player", p.Name, "disconnected.")
 	cleanup(g)
-	fmt.Println(shared)
 }
 
 // memory leak prevention
 func cleanup(g *game.Game) {
 	if g.IsEmpty() {
 		g.End()
-		if g.IsShared() {
+		if g.HasID() {
 			mx.Lock()
 			delete(shared, g.ID)
 			mx.Unlock()
@@ -157,11 +157,11 @@ func router(gp **game.Game, p *player.Player, f []string) {
 			g.EmitAll("Game ended. Player", p.Name, "won.")
 			g.End()
 		} else {
-			g.EmitAll("BOOM", p.Name, p.Points)
+			g.EmitAll("BOOM", p.Name, p.Points, "<missed>")
 		}
 
 	case "share":
-		if !g.IsShared() {
+		if !g.HasID() || !isShared(g) {
 			g.Share()
 			mx.Lock()
 			shared[g.ID] = g

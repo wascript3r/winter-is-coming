@@ -1,8 +1,15 @@
 package rnd
 
-import "math/rand"
+import (
+	"math/rand"
+	"time"
+)
 
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
+
+func init() {
+	rand.Seed(time.Now().UTC().UnixNano())
+}
 
 // String generates a random string of n chars
 func String(n int) string {

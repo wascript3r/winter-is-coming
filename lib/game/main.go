@@ -70,8 +70,8 @@ func (g *Game) IsEmpty() bool {
 	return len(g.players) == 0
 }
 
-// IsShared checks if game is accessible by other clients
-func (g *Game) IsShared() bool {
+// HasID checks if game has the public ID
+func (g *Game) HasID() bool {
 	return g.ID != ""
 }
 
