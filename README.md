@@ -21,7 +21,7 @@ telnet 127.0.0.1 3000
 
 ## Command list
 ```
-START {name} - starts a new game (ex. START John)
+START {name}   - starts a new game (ex. START John)
 SHOOT {x} {y}  - shoots at given coordinates (ex. SHOOT 0 1)
 SHARE          - shares your current game to be accessible for friends
 JOIN {GAME_ID} - joins the provided game
