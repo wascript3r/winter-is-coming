@@ -33,6 +33,7 @@ var (
 	mx     = &sync.RWMutex{}
 )
 
+// Run starts the server
 func Run(c *Config) {
 	config = c
 
@@ -80,6 +81,7 @@ func handle(conn net.Conn) {
 	fmt.Println(shared)
 }
 
+// memory leak prevention
 func cleanup(g *game.Game) {
 	if g.IsEmpty() {
 		g.End()

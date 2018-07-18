@@ -4,6 +4,7 @@ import "math/rand"
 
 var letters = []rune("abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ")
 
+// String generates a random string of n chars
 func String(n int) string {
 	b := make([]rune, n)
 	for i := range b {

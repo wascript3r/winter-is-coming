@@ -3,6 +3,7 @@ package tests
 import (
 	"bufio"
 	"net"
+	"runtime"
 	"strconv"
 	"testing"
 	"time"
@@ -24,6 +25,8 @@ var (
 )
 
 func init() {
+	runtime.GOMAXPROCS(runtime.NumCPU())
+
 	port := strconv.Itoa(config.Port)
 	IP = "127.0.0.1:" + port
 	go func() {
