@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"log"
 	"net"
+	"strconv"
 	"strings"
 	"sync"
 
@@ -15,30 +16,28 @@ import (
 	"github.com/wascript3r/winter-is-coming/lib/player"
 )
 
-const (
-	boardX     = 40
-	boardY     = 20
-	zombieName = "night-king"
-	port       = ":3000"
-)
-
 var (
-	ErrEmptyCMD       = errors.New("empty command")
-	ErrInvalidCMD     = errors.New("invalid command")
-	ErrMissingParams  = errors.New("missing command parameters")
-	ErrAlreadyStarted = errors.New("game was already started")
-	ErrNotStarted     = errors.New("you must start the game first")
-	ErrInvalidCoord   = errors.New("invalid coordinates")
-	ErrPleaseWait     = errors.New("please wait until zombie starts walking")
-	ErrCannotJoin     = errors.New("cannot join because game is already started")
-	ErrGameNotFound   = errors.New("game not found")
+	ErrConfigNotProvided = errors.New("config not provided")
+	ErrEmptyCMD          = errors.New("empty command")
+	ErrInvalidCMD        = errors.New("invalid command")
+	ErrMissingParams     = errors.New("missing command parameters")
+	ErrAlreadyStarted    = errors.New("game was already started")
+	ErrNotStarted        = errors.New("you must start the game first")
+	ErrInvalidCoord      = errors.New("invalid coordinates")
+	ErrPleaseWait        = errors.New("please wait until zombie starts walking")
+	ErrCannotJoin        = errors.New("cannot join because game is already started")
+	ErrGameNotFound      = errors.New("game not found")
 
+	config *Config
 	shared = make(map[string]*game.Game)
 	mx     = &sync.RWMutex{}
 )
 
-func Run() {
-	li, err := net.Listen("tcp", port)
+func Run(c *Config) {
+	config = c
+
+	port := strconv.Itoa(config.Port)
+	li, err := net.Listen("tcp", ":"+port)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -97,8 +96,8 @@ func createGame(g *game.Game, p *player.Player) {
 		g.Join(p)
 		return
 	}
-	z := zombie.New(zombieName, boardX, boardY)
-	g.Init(boardX, boardY, z)
+	z := zombie.New(config.ZombieName, config.BX, config.BY)
+	g.Init(config.BX, config.BY, z)
 	g.Join(p)
 	g.Start()
 }

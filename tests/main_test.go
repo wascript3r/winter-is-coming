@@ -3,6 +3,7 @@ package tests
 import (
 	"bufio"
 	"net"
+	"strconv"
 	"testing"
 	"time"
 
@@ -11,14 +12,26 @@ import (
 	"github.com/wascript3r/winter-is-coming/server"
 )
 
+var (
+	IP     string
+	config = &server.Config{
+		BX:         3,
+		BY:         4,
+		ZombieName: "night-king",
+		Port:       3001,
+	}
+)
+
 func init() {
+	port := strconv.Itoa(config.Port)
+	IP = "127.0.0.1:" + port
 	go func() {
-		server.Run()
+		server.Run(config)
 	}()
 }
 
 func newConn(t *testing.T) (net.Conn, *bufio.Scanner) {
-	conn, err := net.Dial("tcp", "127.0.0.1:3000")
+	conn, err := net.Dial("tcp", IP)
 	if err != nil {
 		t.Fatal(err)
 	}

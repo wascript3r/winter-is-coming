@@ -11,5 +11,10 @@ func init() {
 }
 
 func main() {
-	server.Run()
+	server.Run(&server.Config{
+		BX:         10,
+		BY:         30,
+		ZombieName: "night-king",
+		Port:       3000,
+	})
 }
