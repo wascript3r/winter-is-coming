@@ -2,6 +2,7 @@ package main
 
 import (
 	"runtime"
+	"time"
 
 	"github.com/wascript3r/winter-is-coming/server"
 )
@@ -16,5 +17,6 @@ func main() {
 		BY:         30,
 		ZombieName: "night-king",
 		Port:       3000,
+		Interval:   2 * time.Second,
 	})
 }

@@ -15,10 +15,11 @@ import (
 var (
 	IP     string
 	config = &server.Config{
-		BX:         3,
-		BY:         4,
+		BX:         2,
+		BY:         2,
 		ZombieName: "night-king",
 		Port:       3001,
+		Interval:   2 * time.Second,
 	}
 )
 

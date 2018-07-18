@@ -65,7 +65,7 @@ func handle(conn net.Conn) {
 
 	showHelp(conn)
 
-	g := game.New()
+	g := game.New(config.Interval)
 	p := player.New(conn)
 
 	sc := bufio.NewScanner(conn)

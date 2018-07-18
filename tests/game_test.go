@@ -4,8 +4,10 @@ import (
 	"fmt"
 	"strings"
 	"testing"
+	"time"
 
 	"github.com/stretchr/testify/require"
+	"github.com/wascript3r/winter-is-coming/server"
 )
 
 func TestShoot(t *testing.T) {
@@ -13,8 +15,8 @@ func TestShoot(t *testing.T) {
 
 	conn, sc := newConn(t)
 
-	fmt.Fprintln(conn, "START test")
 	skipHelpMsg(t, sc)
+	fmt.Fprintln(conn, "START test")
 
 	skipScan(t, sc, 1)
 	require.Equal(t, "Player test started playing.", sc.Text())
@@ -33,6 +35,11 @@ func TestShoot(t *testing.T) {
 
 	skipScan(t, sc, 1)
 	require.Equal(t, "Game ended. Player test won.", sc.Text())
+
+	fmt.Fprintln(conn, "SHOOT", x, y)
+	skipScan(t, sc, 1)
+	err := "ERR " + server.ErrNotStarted.Error()
+	require.Equal(t, err, sc.Text())
 }
 
 func TestGameSharing(t *testing.T) {
@@ -41,14 +48,14 @@ func TestGameSharing(t *testing.T) {
 	conn1, sc1 := newConn(t)
 	conn2, sc2 := newConn(t)
 
-	fmt.Fprintln(conn1, "SHARE")
 	skipHelpMsg(t, sc1)
+	fmt.Fprintln(conn1, "SHARE")
 	skipScan(t, sc1, 1)
 	require.Contains(t, sc1.Text(), "Game ID: ")
 	ID := strings.Replace(sc1.Text(), "Game ID: ", "", 1)
 
-	fmt.Fprintln(conn2, "JOIN", ID)
 	skipHelpMsg(t, sc2)
+	fmt.Fprintln(conn2, "JOIN", ID)
 	skipScan(t, sc2, 1)
 	require.Equal(t, "Connected.", sc2.Text())
 
@@ -59,4 +66,28 @@ func TestGameSharing(t *testing.T) {
 
 	skipScan(t, sc2, 2)
 	require.Equal(t, "Player test1 started playing.", sc2.Text())
+}
+
+func TestZombie(t *testing.T) {
+	t.Parallel()
+
+	conn, sc := newConn(t)
+
+	skipHelpMsg(t, sc)
+	fmt.Fprintln(conn, "START test")
+
+	c := time.After(time.Duration(config.BX*config.BY) * config.Interval)
+
+loop:
+	for {
+		select {
+		case <-c:
+			t.Fatal("Zombie timeout")
+
+		default:
+			if sc.Scan() && strings.Contains(sc.Text(), "Game ended. Zombie night-king won.") {
+				break loop
+			}
+		}
+	}
 }

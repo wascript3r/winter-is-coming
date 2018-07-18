@@ -12,9 +12,10 @@ import (
 )
 
 type Game struct {
-	ID     string
-	BX, BY int
-	Zombie *zombie.Zombie
+	ID       string
+	BX, BY   int
+	Zombie   *zombie.Zombie
+	Interval time.Duration
 
 	players map[int]*player.Player
 	inc     int
@@ -23,8 +24,11 @@ type Game struct {
 	started bool
 }
 
-func New() *Game {
-	return &Game{mx: &sync.RWMutex{}}
+func New(i time.Duration) *Game {
+	return &Game{
+		Interval: i,
+		mx:       &sync.RWMutex{},
+	}
 }
 
 func (g *Game) Init(bX, bY int, z *zombie.Zombie) {
@@ -72,7 +76,7 @@ func (g *Game) Start() {
 		return
 	}
 
-	g.end = repeat.Do(2*time.Second, func() bool {
+	g.end = repeat.Do(g.Interval, func() bool {
 		end := g.Zombie.Walk()
 		g.EmitAll("WALK", g.Zombie.Name, g.Zombie.X, g.Zombie.Y)
 		if end {
